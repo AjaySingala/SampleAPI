@@ -16,6 +16,11 @@ namespace SampleAPI.Controllers
             _repo = new CustomerRepository();
         }
 
+        public CustomerController(ICustomerRepository repo)
+        {
+            _repo = repo;
+        }
+
         [HttpGet]
         public List<Customer> Get()
         {
