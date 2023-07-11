@@ -30,7 +30,8 @@ namespace SampleAPI.Controllers
         [HttpGet("{id}")]
         public Customer Get(int id)
         {
-            return _repo.Get(id);
+            var customer = _repo.Get(id);
+            return customer;
         }
     }
 }
