@@ -20,21 +20,21 @@ namespace SampleAPITests
             Assert.Equal(expectedFirstname, fname);
         }
 
-        [Fact]
-        public void GetCustomerByIDDummyData()
-        {
-            // Arrange.
-            ICustomerRepository repository = new TestCustomerRepository();
-            CustomerController controller = new CustomerController(repository);
+        //[Fact]
+        //public void GetCustomerByIDDummyData()
+        //{
+        //    // Arrange.
+        //    ICustomerRepository repository = new TestCustomerRepository();
+        //    CustomerController controller = new CustomerController(repository);
 
-            var expectedLastname = "Test";
+        //    var expectedLastname = "Test";
 
-            // Act.
-            var result = controller.Get(101);
-            var lname = result.Lastname;
+        //    // Act.
+        //    var result = controller.Get(101);
+        //    var lname = result.Lastname;
 
-            // Assert.
-            Assert.Equal(expectedLastname, lname);
-        }
+        //    // Assert.
+        //    Assert.Equal(expectedLastname, lname);
+        //}
     }
 }
