@@ -19,6 +19,12 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*[Tt]est*/*.csproj'
+    publishTestResults: true
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'AJS-DevOps-Svc-Connection'
