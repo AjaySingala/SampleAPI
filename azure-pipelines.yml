@@ -20,19 +20,37 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
+# run unit tests and generate both:
+# 1. Test results in .trx file format / VSTest format
+# 2. Code coverage results in Cobertura file format
 - task: DotNetCoreCLI@2
-  displayName: Test
+  displayName: 'Run Unit Tests - $(buildConfiguration)'
   inputs:
     command: 'test'
-    projects: '**/*[Tt]est*/*.csproj'
-    publishTestResults: true
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-- task: PublishPipelineArtifact@1
-  displayName: Collect Code Coverage
+    arguments: '--no-build --configuration $(buildConfiguration) --logger trx --results-directory "$(Build.SourcesDirectory)/TestResults/Coverage/"  --collect "XPlat Code Coverage"'
+    publishTestResults: false
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
   inputs:
-    targetPath: $(build.artifactStagingDirectory)
-    artifact: 'drop'
-    publishLocation: 'pipeline'
+    testResultsFormat: VSTest
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(Build.SourcesDirectory)/TestResults/Coverage/'
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet Tool Install "reportgenerator"'
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'install -g dotnet-reportgenerator-globaltool'
+- task: PowerShell@2
+  displayName: 'Create Code Coverage Report'
+  inputs:
+    targetType: 'inline'
+    script: reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage Report'
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
 - task: AzureWebApp@1
   displayName: Deploy
   inputs:
