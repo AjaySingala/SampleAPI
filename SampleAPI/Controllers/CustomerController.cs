@@ -9,12 +9,12 @@ namespace SampleAPI.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        ICustomerRepository _repo = new CustomerRepository();
+        ICustomerRepository _repo;
 
-        //public CustomerController()
-        //{
-        //    _repo = new CustomerRepository();
-        //}
+        public CustomerController()
+        {
+            _repo = new CustomerRepository();
+        }
 
         //public CustomerController(ICustomerRepository repo)
         //{
